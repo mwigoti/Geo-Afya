@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'base'
 ]
 
 MIDDLEWARE = [
@@ -72,11 +73,27 @@ WSGI_APPLICATION = 'GeoAfya.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+# GeoAfya/settings.py
+import os
+import dj_database_url
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# ------------------------------------------------------------------------------
+# DATABASE CONFIGURATION (Aiven PostGIS via dj-database-url)
+# ------------------------------------------------------------------------------
+
+# Example DATABASE_URL format in your .env file:
+# DATABASE_URL=postgres://avnadmin:your_password@pg-xxxx.aivencloud.com:22114/defaultdb?sslmode=require
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL'),
+        engine='django.contrib.gis.db.backends.postgis',
+        conn_max_age=600,  # Enable persistent connections
+        ssl_require=True   # Enforce TLS connection to Aiven
+    )
 }
 
 
@@ -115,3 +132,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# Notification Credentials
+AFRICASTALKING_USERNAME = os.getenv("AFRICASTALKING_USERNAME", "sandbox")
+AFRICASTALKING_API_KEY = os.getenv("AFRICASTALKING_API_KEY", "")
+AFRICASTALKING_SENDER_ID = os.getenv("AFRICASTALKING_SENDER_ID", "GeoAfya")
+
+TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID", "")
+TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN", "")
+TWILIO_FROM_NUMBER = os.getenv("TWILIO_FROM_NUMBER", "")
+
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "alerts@geoafya.org")
