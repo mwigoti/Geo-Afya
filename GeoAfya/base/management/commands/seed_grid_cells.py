@@ -1,4 +1,5 @@
 import os
+import json
 import logging
 import numpy as np
 import geopandas as gpd
@@ -75,7 +76,7 @@ class Command(BaseCommand):
             
             # Convert geometry to Django GEOS Geometry & ensure EPSG:4326 MultiPolygon
             geom_json = row['geometry'].__geo_interface__
-            geos_geom = GEOSGeometry(str(geom_json))
+            geos_geom = GEOSGeometry(json.dumps(geom_json))
             
             if isinstance(geos_geom, Polygon):
                 geos_geom = MultiPolygon(geos_geom)
@@ -92,10 +93,11 @@ class Command(BaseCommand):
             pop_density = float(row.get('pop_density', np.random.uniform(5.0, 850.0)))
             settlement_dist = float(row.get('settlement_dist', np.random.uniform(0.5, 30.0)))
             healthcare_deficit = float(row.get('healthcare_deficit', np.random.uniform(0.1, 0.9)))
-
+            centroid_point = geos_geom.centroid
             grid_cell = SpatialGridCell(
                 cell_id=cell_id,
                 geom=geos_geom,
+                centroid=centroid_point,
                 poverty_rate=poverty_rate,
                 malnutrition_rate=malnutrition_rate,
                 health_travel_time=health_travel_time,

@@ -12,10 +12,16 @@ class SpatialGridCell(models.Model):
     and epidemiological calculations.
     """
     cell_id = models.IntegerField(unique=True, db_index=True)
-    geom = models.PolygonField(srid=4326)  # Boundary extent (WGS 84)
+    geom = models.MultiPolygonField(srid=4326)  # Boundary extent (WGS 84)
     centroid = models.PointField(srid=4326) # Cell center point for rapid proximity queries
     district_name = models.CharField(max_length=100, db_index=True)
     has_population = models.BooleanField(default=True)
+    poverty_rate = models.FloatField(default=0.0)
+    malnutrition_rate = models.FloatField(default=0.0)
+    health_travel_time = models.FloatField(default=0.0)
+    pop_density = models.FloatField(default=0.0)
+    settlement_dist = models.FloatField(default=0.0)
+    healthcare_deficit = models.FloatField(default=0.0)
 
     class Meta:
         verbose_name = "Spatial Grid Cell"

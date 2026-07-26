@@ -92,7 +92,7 @@ DATABASES = {
         default=os.getenv('DATABASE_URL'),
         engine='django.contrib.gis.db.backends.postgis',
         conn_max_age=600,  # Enable persistent connections
-        ssl_require=True   # Enforce TLS connection to Aiven
+        ssl_require=os.getenv('DB_SSL_REQUIRE', 'True').lower() in ('true', '1', 'yes')
     )
 }
 
@@ -143,3 +143,4 @@ TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN", "")
 TWILIO_FROM_NUMBER = os.getenv("TWILIO_FROM_NUMBER", "")
 
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "alerts@geoafya.org")
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
