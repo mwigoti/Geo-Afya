@@ -1,5 +1,7 @@
 # GeoAfya
 
+Developer: Henry Mwoha
+
 GeoAfya is a spatial epidemiology and decision-support platform designed to detect and prioritize disease risk in vulnerable communities, with a particular focus on kala-azar (visceral leishmaniasis) in refugee and movement corridors. The application combines satellite-derived environmental indicators, demographic vulnerability, health access data, and operational alerting to identify high-risk geographic cells before outbreaks widen.
 
 The project is built as a Django + GeoDjango application with PostGIS, Google Earth Engine integration, vectorized risk scoring, and Celery-based alert dispatch. It is meant to help public health teams, NGOs, and field health workers act earlier and more efficiently in high-risk refugee environments.
